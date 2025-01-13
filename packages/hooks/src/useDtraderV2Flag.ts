@@ -13,8 +13,8 @@ const useDtraderV2Flag = () => {
     const is_dtrader_v2_mobile = isDtraderV2MobileEnabled(is_mobile);
     const is_dtrader_v2_desktop = isDtraderV2DesktopEnabled(is_desktop);
 
-    const [dtrader_v2_enabled_mobile, setDtraderV2EnabledMobile] = useState(false);
-    const [dtrader_v2_enabled_desktop, setDtraderV2EnabledDesktop] = useState(false);
+    const [dtrader_v2_enabled_mobile, setDtraderV2EnabledMobile] = useState(true);
+    const [dtrader_v2_enabled_desktop, setDtraderV2EnabledDesktop] = useState(true);
 
     useEffect(() => {
         if (is_growthbook_loaded || is_dtrader_v2_mobile) {
