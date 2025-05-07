@@ -34,7 +34,7 @@ jest.mock('@deriv-com/quill-ui', () => ({
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useLocation: jest.fn(() => ({
-        pathname: '/dtrader',
+        pathname: '/',
     })),
 }));
 

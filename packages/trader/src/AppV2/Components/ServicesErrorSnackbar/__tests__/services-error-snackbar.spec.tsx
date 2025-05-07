@@ -50,7 +50,7 @@ describe('ServicesErrorSnackbar', () => {
 
     it('calls useSnackbar if it is trading page, there is a services_error and it is not a modal error', () => {
         (useLocation as jest.Mock).mockReturnValue({
-            pathname: '/dtrader',
+            pathname: '/',
         });
         render(mockServicesErrorSnackbar());
 
@@ -59,7 +59,7 @@ describe('ServicesErrorSnackbar', () => {
 
     it('calls useSnackbar if it is a company wide limit error', () => {
         (useLocation as jest.Mock).mockReturnValue({
-            pathname: '/dtrader',
+            pathname: '/',
         });
         default_mock_store.common.services_error = {
             code: SERVICE_ERROR.COMPANY_WIDE_LIMIT_EXCEEDED,
@@ -73,7 +73,7 @@ describe('ServicesErrorSnackbar', () => {
 
     it('calls useSnackbar if it is trading page and there is an error without error_field in proposal_info and arrays in validation_errors are empty', () => {
         (useLocation as jest.Mock).mockReturnValue({
-            pathname: '/dtrader',
+            pathname: '/',
         });
         default_mock_store.common.services_error = {};
         default_mock_store.modules.trade = {
@@ -116,7 +116,7 @@ describe('ServicesErrorSnackbar', () => {
 
     it('calls useSnackbar if it is positions page and there is a services_error', () => {
         (useLocation as jest.Mock).mockReturnValue({
-            pathname: '/dtrader/positions',
+            pathname: '/positions',
         });
         render(mockServicesErrorSnackbar());
 

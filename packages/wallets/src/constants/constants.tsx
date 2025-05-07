@@ -41,7 +41,7 @@ export const getOptionsAndMultipliersContent = (
             ? localize('Custom charts, low-entry costs.')
             : localize('The options and multipliers trading platform.'),
         key: 'trader',
-        redirect: '/dtrader',
+        redirect: '/',
         title: 'Deriv Trader',
     },
     {

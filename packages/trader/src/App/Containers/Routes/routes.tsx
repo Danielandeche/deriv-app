@@ -20,7 +20,7 @@ type TTradePageMountingMiddlewareParams = {
     path_to: string;
 };
 
-export const checkRoutingMatch = (route_list: Array<string | undefined>, path = '/dtrader') => {
+export const checkRoutingMatch = (route_list: Array<string | undefined>, path = '/') => {
     return route_list.some(route => !!matchPath(path, { path: route, exact: true }));
 };
 

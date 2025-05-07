@@ -19,7 +19,7 @@ jest.mock('App/Components/Layout/Header/dtrader-v2/real-signup-banner-dtrader-v2
 );
 jest.mock('react-router-dom', () => ({
     useLocation: jest.fn(() => ({
-        pathname: '/dtrader',
+        pathname: '/',
     })),
 }));
 

@@ -7,7 +7,7 @@ const LinkTitle: React.FC<{ platform: ComponentProps<typeof WalletMarketIcon>['i
         event.persist();
         switch (platform) {
             case 'trader':
-                window.open(getStaticUrl(`/dtrader`));
+                window.open(getStaticUrl(`/`));
                 break;
             case 'bot':
                 window.open(getStaticUrl(`/dbot`));

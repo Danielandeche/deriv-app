@@ -144,7 +144,7 @@ const TradingAppCard = ({
         if (is_deriv_platform) {
             switch (name) {
                 case DERIV_PLATFORM_NAMES.TRADER:
-                    window.open(getStaticUrl(`/dtrader`));
+                    window.open(getStaticUrl(`/`));
                     break;
                 case DERIV_PLATFORM_NAMES.DBOT:
                     window.open(getStaticUrl(`/dbot`));

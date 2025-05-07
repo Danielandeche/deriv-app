@@ -41,7 +41,7 @@ describe('useDtraderV2Flag', () => {
     beforeAll(() => {
         const mockLocation = {
             ...originalLocation,
-            pathname: '/dtrader',
+            pathname: '/',
         };
 
         Object.defineProperty(window, 'location', {

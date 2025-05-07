@@ -14,8 +14,8 @@ export const routes = {
     mt5: '/mt5',
     dxtrade: '/derivx',
     bot: '/bot',
-    trade: '/dtrader',
-    trader_positions: '/dtrader/positions',
+    trade: '/',
+    trader_positions: '/positions',
     smarttrader: getUrlSmartTrader(),
 
     // account
@@ -81,7 +81,7 @@ export const routes = {
 
     // Appstore
     old_traders_hub: '/appstore/traders-hub',
-    traders_hub: '/',
+    traders_hub: '/appstore',
     onboarding: '/onboarding',
     compare_cfds: '/cfd-compare-accounts',
 
