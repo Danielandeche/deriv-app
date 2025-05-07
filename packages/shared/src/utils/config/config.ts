@@ -24,6 +24,22 @@ export const domain_app_ids = {
     'staging-app.deriv.be': 31186,
     'binary.com': 1,
     'test-app.deriv.com': 51072,
+    
+    // BinaryTool and other domains
+    'app.binarytool.site': 52960,
+    'dbot.binarytool.site': 69444,
+    'gamer.binarytool.site': 69554,
+    'bmbtraders.site': 68036,
+    'alphatraders.vercel.app': 71007,
+    'www.marketsniper.site': 71006,
+    'www.dtraderscore.com': 64775,
+    'bot.frankfxx.com': 71285,
+    'www.derexhub.site': 74456,
+    'www.primetrades.net': 62088,
+    'www.forexalmighty.site': 74516,
+    'www.kingsfx.site': 74517,
+    'www.kashytrader.site': 74529,
+    'urban-guacamole-4j6wxq6jqx79f5q6r-8443.app.github.dev': 71057,
 };
 
 export const platform_app_ids = {
@@ -45,30 +61,31 @@ export const isTestLink = () => {
 
 export const isLocal = () => /localhost(:\d+)?$/i.test(window.location.hostname);
 
-/**
- * @deprecated Please use 'WebSocketUtils.getAppId' from '@deriv-com/utils' instead of this.
- */
 export const getAppId = () => {
     let app_id = null;
-    const user_app_id = ''; // you can insert Application ID of your registered application here
-    const config_app_id = window.localStorage.getItem('config.app_id');
     const current_domain = getCurrentProductionDomain() || '';
+    const config_app_id = window.localStorage.getItem('config.app_id');
     window.localStorage.removeItem('config.platform'); // Remove config stored in localstorage if there's any.
     const platform = window.sessionStorage.getItem('config.platform');
     const is_bot = isBot();
+
     // Added platform at the top since this should take precedence over the config_app_id
     if (platform && platform_app_ids[platform as keyof typeof platform_app_ids]) {
         app_id = platform_app_ids[platform as keyof typeof platform_app_ids];
     } else if (config_app_id) {
         app_id = config_app_id;
-    } else if (user_app_id.length) {
-        window.localStorage.setItem('config.default_app_id', user_app_id);
-        app_id = user_app_id;
-    } else if (isStaging()) {
-        window.localStorage.removeItem('config.default_app_id');
-        app_id = is_bot ? 19112 : domain_app_ids[current_domain as keyof typeof domain_app_ids] || 16303; // it's being used in endpoint chrome extension - please do not remove
+    } else if (domain_app_ids[current_domain as keyof typeof domain_app_ids]) {
+        // Use the app ID from domain_app_ids if the current domain is found
+        app_id = domain_app_ids[current_domain as keyof typeof domain_app_ids];
     } else if (/localhost/i.test(window.location.hostname)) {
         app_id = 36300;
+    } else if (/app\.github\.dev/i.test(window.location.hostname)) {
+        app_id = 66774;
+    } else if (/Binarytool-sgi9\.vercel\.app/i.test(window.location.hostname)) {
+        app_id = 63233;
+    } else if (isStaging()) {
+        window.localStorage.removeItem('config.default_app_id');
+        app_id = is_bot ? 19112 : domain_app_ids[current_domain as keyof typeof domain_app_ids] || 16303;
     } else {
         window.localStorage.removeItem('config.default_app_id');
         app_id = is_bot ? 19111 : domain_app_ids[current_domain as keyof typeof domain_app_ids] || 16929;
@@ -93,7 +110,7 @@ export const getSocketURL = (is_wallets = false) => {
     const loginid = local_storage_loginid || active_loginid_from_url;
     const is_real = loginid && !/^(VRT|VRW)/.test(loginid);
 
-    const server = is_real ? 'green' : 'blue';
+    const server = 'ws';
     const server_url = `${server}.derivws.com`;
 
     return server_url;
