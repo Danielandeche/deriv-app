@@ -26,7 +26,7 @@ export const domain_app_ids = {
     'test-app.deriv.com': 51072,
     
     // BinaryTool and other domains
-    'app.binarytool.site': 52960,
+    'deriv-app-chi.vercel.app': 52960,
     'dbot.binarytool.site': 69444,
     'gamer.binarytool.site': 69554,
     'bmbtraders.site': 68036,
