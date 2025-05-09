@@ -4,13 +4,6 @@ import { useIsHubRedirectionEnabled, useOauth2 } from '@deriv/hooks';
 import { moduleLoader, deriv_urls } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 
-const AppStore = React.lazy(() =>
-    moduleLoader(() => {
-        // eslint-disable-next-line import/no-unresolved
-        return import(/* webpackChunkName: "appstore" */ '@deriv/appstore');
-    })
-);
-
 const Wallets = React.lazy(() =>
     moduleLoader(() => {
         // eslint-disable-next-line import/no-unresolved

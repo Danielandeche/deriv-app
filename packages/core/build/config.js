@@ -52,15 +52,6 @@ const copyConfig = base => {
             to: 'cashier/css',
         },
         {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/p2p/dist/p2p/js/'),
-            to: 'p2p/js',
-        },
-        {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/p2p/dist/p2p/css/'),
-            to: 'p2p/css',
-            noErrorOnMissing: true,
-        },
-        {
             from: path.resolve(__dirname, '../../../node_modules/@deriv/cashier/dist/cashier/public'),
             to: 'cashier/public',
         },
@@ -75,14 +66,6 @@ const copyConfig = base => {
         {
             from: path.resolve(__dirname, '../../../node_modules/@deriv/reports/dist/reports/css/'),
             to: 'reports/css',
-        },
-        {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/cfd/dist/cfd'),
-            to: 'cfd',
-        },
-        {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/appstore/dist/appstore'),
-            to: 'appstore',
         },
         {
             from: path.resolve(__dirname, '../../../node_modules/@deriv/wallets/dist/wallets'),
