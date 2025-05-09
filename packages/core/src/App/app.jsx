@@ -4,15 +4,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { APIProvider } from '@deriv/api';
-import { CashierStore } from '@deriv/cashier';
 import { Loading } from '@deriv/components';
-import {
-    initFormErrorMessages,
-    POIProvider,
-    setUrlLanguage,
-    setWebsocket,
-    useOnLoadTranslation,
-} from '@deriv/shared';
+import { initFormErrorMessages, POIProvider, setUrlLanguage, setWebsocket, useOnLoadTranslation } from '@deriv/shared';
 import { P2PSettingsProvider, StoreProvider } from '@deriv/stores';
 import { getLanguage, initializeTranslations } from '@deriv/translations';
 import { Analytics } from '@deriv-com/analytics';
@@ -33,11 +26,8 @@ const AppWithoutTranslation = ({ root_store }) => {
     const base = l.pathname.split('/')[1];
     const has_base = /^\/(br_)/.test(l.pathname);
     const [is_translation_loaded] = useOnLoadTranslation();
-    
-    const initCashierStore = () => {
-        root_store.modules.attachModule('cashier', new CashierStore(root_store, WS));
-        root_store.modules.cashier.general_store.init();
-    };
+
+    // Removed initCashierStore function completely
 
     const { i18n } = useTranslation();
     const { preferred_language } = root_store.client;
@@ -90,7 +80,7 @@ const AppWithoutTranslation = ({ root_store }) => {
     }, [i18n, i18n.language]);
 
     React.useEffect(() => {
-        initCashierStore();
+        // Removed initCashierStore call
         const loadSmartchartsStyles = () => {
             import('@deriv/deriv-charts/dist/smartcharts.css');
         };
