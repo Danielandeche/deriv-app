@@ -37,13 +37,9 @@ const getStringsFromXmlFile = input => {
 const getTranslatableFiles = () => {
     const packages_with_translations = [
         'account',
-        'appstore',
         'cashier',
-        'bot-web-ui',
         'core',
-        'cfd',
         'trader',
-        'bot-skeleton',
         'reports',
         'shared',
     ];

@@ -68,7 +68,7 @@
     "scripts": {
         "analyze:build": "nx run-many --target=analyze:build",
         "analyze:stats": "nx run-many --target=analyze:stats",
-        "build:all": "nx build @deriv/components --skip-nx-cache && nx build @deriv/account  --skip-nx-cache && nx build @deriv/bot-web-ui --skip-nx-cache && nx build @deriv/trader --skip-nx-cache && nx run-many --target=build",
+        "build:all": "nx build @deriv/components --skip-nx-cache && nx build @deriv/account --skip-nx-cache && nx build @deriv/trader --skip-nx-cache && nx run-many --target=build",
         "build:one": "f () { nx build @deriv/$1 $2 ;}; f",
         "build:since": "nx affected --target=build",
         "test:eslint-all": "nx run-many --target=test:eslint",
@@ -78,7 +78,7 @@
         "bootstrap": "npm ci --strict-peer-deps --verbose",
         "bootstrap:dev": "npm install --strict-peer-deps --verbose",
         "build:publish": "npm run build:publish --workspace=@deriv/* --",
-        "build:local": "f () { nx run-many --target=build --projects=@deriv/bot-web-ui,@deriv/trader --parallel=2 ;}; f",
+        "build:local": "f () { nx run-many --target=build --projects=@deriv/trader --parallel=2 ;}; f",
         "build:travis": "nx run-many --projects=@deriv/shared,@deriv/components,@deriv/translations,@deriv/cashier,@deriv/account,@deriv/p2p,@deriv/reports --target=build:travis",
         "build:prod": "export NODE_ENV=staging && npm run build:all && export NODE_ENV=",
         "build:storybook": "cd packages/components && sb build --output-dir .out",

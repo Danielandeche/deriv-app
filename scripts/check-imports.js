@@ -12,11 +12,7 @@ const path = require('path');
 const BLOCKED_IMPORTS = {
     '/packages/account': ['@deriv/api-v2'],
     '/packages/api': ['@deriv/api-v2'],
-    '/packages/appstore': ['@deriv/api-v2'],
-    '/packages/bot-skeleton': ['@deriv/api-v2'],
-    '/packages/bot-web-ui': ['@deriv/api-v2'],
     '/packages/cashier': ['@deriv/api-v2'],
-    '/packages/cfd': ['@deriv/api-v2'],
     '/packages/components': ['@deriv/api-v2'],
     '/packages/core': ['@deriv/api-v2'],
     '/packages/hooks': ['@deriv/api-v2'],

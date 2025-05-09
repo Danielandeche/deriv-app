@@ -8,18 +8,6 @@ const gitRevisionPlugin = new GitRevisionPlugin();
 const copyConfig = base => {
     const patterns = [
         {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/bot-web-ui/dist/bot/css/'),
-            to: 'bot/css/',
-        },
-        {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/bot-web-ui/dist/bot/media/'),
-            to: 'media',
-        },
-        {
-            from: path.resolve(__dirname, '../../../node_modules/@deriv/bot-web-ui/dist/bot/js/'),
-            to: 'bot/js/',
-        },
-        {
             from: path.resolve(__dirname, '../../../node_modules/@deriv/deriv-charts/dist'),
             to: 'js/smartcharts/',
         },
