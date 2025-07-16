@@ -26,7 +26,6 @@ import LandscapeBlocker from './Components/Elements/LandscapeBlocker';
 import AppToastMessages from './Containers/app-toast-messages.jsx';
 import AppContents from './Containers/Layout/app-contents.jsx';
 import Footer from './Containers/Layout/footer.jsx';
-import Header from './Containers/Layout/header';
 import AppModals from './Containers/Modals';
 import Routes from './Containers/Routes/routes.jsx';
 import Devtools from './Devtools';
@@ -172,7 +171,7 @@ const AppContent: React.FC<{ passthrough: unknown }> = observer(({ passthrough }
     return (
         <ThemeProvider theme={is_dark_mode_on ? 'dark' : 'light'}>
             <LandscapeBlocker />
-            {!isCallBackPage && <Header />}
+            {!isCallBackPage}
             <ErrorBoundary root_store={store}>
                 <AppContents>
                     <Routes passthrough={passthrough} />
