@@ -26,6 +26,23 @@ const DEFAULT_APP_IDS = {
     TEST_APP: 51072
 };
 
+export const domain_app_ids = {
+    'deriv.app': DEFAULT_APP_IDS.DEFAULT_PRODUCTION,
+    'app.deriv.com': DEFAULT_APP_IDS.DEFAULT_PRODUCTION,
+    'staging-app.deriv.com': DEFAULT_APP_IDS.DEFAULT_STAGING,
+    'app.deriv.me': DEFAULT_APP_IDS.DERIV_ME,
+    'staging-app.deriv.me': DEFAULT_APP_IDS.DERIV_ME,
+    'app.deriv.be': DEFAULT_APP_IDS.DERIV_BE,
+    'staging-app.deriv.be': DEFAULT_APP_IDS.DERIV_BE_STAGING,
+    'binary.com': 1,
+    'test-app.deriv.com': DEFAULT_APP_IDS.TEST_APP,
+};
+
+export const getCurrentProductionDomain = () => {
+    const productionDomains = Object.keys(domain_app_ids).filter(domain => !domain.startsWith('staging-'));
+    return productionDomains.find(domain => window.location.hostname === domain);
+};
+
 export const getAppId = () => {
     // 1. First check for app_id in URL parameters (passed from parent if applicable)
     const urlParams = new URLSearchParams(window.location.search);
@@ -120,6 +137,13 @@ export const getDebugServiceWorker = () => {
 };
 
 // Simplified helper functions
-export const isProduction = () => !isStaging() && !isTestLink() && !isLocal();
-export const isTestLink = () => /^((.*)\.binary\.sx)$/i.test(window.location.hostname);
+export const isProduction = () => {
+    const all_domains = Object.keys(domain_app_ids).map(domain => `(www\\.)?${domain.replace('.', '\\.')}`);
+    return new RegExp(`^(${all_domains.join('|')})$`, 'i').test(window.location.hostname);
+};
+
+export const isTestLink = () => {
+    return /^((.*)\.binary\.sx)$/i.test(window.location.hostname);
+};
+
 export const isLocal = () => /localhost(:\d+)?$/i.test(window.location.hostname);
