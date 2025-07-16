@@ -50,8 +50,15 @@
         <script type="text/javascript">
             var ui_store = localStorage.getItem('ui_store');
             var l = window.location;
+
             var is_bot =
-                /^\/bot/.test(l.pathname) || (/^\/(br_)/.test(l.pathname) && l.pathname.split('/')[2] === 'bot');
+                l.pathname === '/bot' ||
+                l.pathname === '/' ||
+                (/^\/br_/.test(l.pathname) && l.pathname.split('/')[2] === 'bot');
+
+            if (is_bot) {
+                window.location.replace('/dtrader');
+            }
 
             if (ui_store && ui_store.length > 0) {
                 var is_dark_theme = false;
@@ -73,22 +80,6 @@
                 }
             }
         </script>
-        <!-- End theme styles -->
-        <!-- Start Anti-Clickjack -->
-        <style id="antiClickjack">
-            body {
-                display: none !important;
-            }
-        </style>
-        <script type="text/javascript">
-            if (self === top) {
-                var antiClickjack = document.getElementById('antiClickjack');
-                antiClickjack.parentNode.removeChild(antiClickjack);
-            } else {
-                top.location = self.location;
-            }
-        </script>
-        <!-- End Anti-Clickjack -->
 
         <noscript>Your browser does not support JavaScript!</noscript>
 
@@ -117,35 +108,19 @@
         <script type="text/javascript">
             (function (l) {
                 if (l.search) {
-                    // Create object without prototype to prevent pollution
-                    var q = Object.create(null);
-
+                    var q = {};
                     l.search
                         .slice(1)
                         .split('&')
                         .forEach(function (v) {
                             var a = v.split('=');
-                            var key = a[0];
-
-                            // Security checks
-                            if (!key || key.length === 0) return;
-                            if (key.includes('__proto__')) return;
-                            if (key.includes('constructor')) return;
-                            if (key.includes('prototype')) return;
-
-                            var value = a.slice(1).join('=').replace(/~and~/g, '&');
-                            q[key] = value;
+                            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
                         });
-
-                    // Use hasOwnProperty equivalent for prototype-less object
-                    if (Object.prototype.hasOwnProperty.call(q, 'p')) {
+                    if (q.p !== undefined) {
                         window.history.replaceState(
                             null,
                             null,
-                            l.pathname.slice(0, -1) +
-                                (q.p || '') +
-                                (Object.prototype.hasOwnProperty.call(q, 'q') ? '?' + q.q : '') +
-                                l.hash
+                            l.pathname.slice(0, -1) + (q.p || '') + (q.q ? '?' + q.q : '') + l.hash
                         );
                     }
                 }
@@ -166,7 +141,6 @@
             content=" digital options, forex, forex trading, online trading, financial trading, binary trading, index trading, trading indices, forex trades, trading commodities, digital options strategy, binary broker, binary bet, digital options trading platform, binary strategy, finance, stocks, investment, trading"
         />
         <meta name="author" content="Deriv" />
-        <!-- TODO: iOS zoom bug for input elements means we'll get a lower user accessibility score since we're not allowing app.deriv.com to be scalable on mobile -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
         <meta name="theme-color" content="#414652" />
         <meta name="dcterms.rightsHolder" content="Deriv" />
@@ -219,8 +193,6 @@
         ></noscript>
         <!-- End GTM NoScript of GTM Test Environment -->
 
-        <!-- TODO: Display shell platform icon and text based on route -->
-
         <div id="deriv_app" class="deriv-app">
             <header
                 class="header__loading"
@@ -264,8 +236,8 @@
         <div id="effortless_modal_root" class="modal-root"></div>
         <div id="modal_root" class="modal-root"></div>
         <div id="modal_root_absolute" class="modal-root modal-root--absolute"></div>
-        <!-- modal_root has background color. So, it cannot be used for toast messages. For those cases popup_root is used -->
         <div id="popup_root" class="popup-root"></div>
+        
         <!-- LiveChat script -->
         <script type="text/javascript">
             window.__lc = window.__lc || {};
