@@ -2,101 +2,88 @@ import { isBot } from '../platform';
 import { isStaging } from '../url/helpers';
 
 /*
- * Configuration values needed in js codes
- *
- * NOTE:
- * Please use the following command to avoid accidentally committing personal changes
- * git update-index --assume-unchanged packages/shared/src/utils/config.js
- *
+ * Simplified configuration with unified WebSocket server
  */
 
 export const livechat_license_id = 12049137;
 export const livechat_client_id = '66aa088aad5a414484c1fd1fa8a5ace7';
 
-export const domain_app_ids = {
-    // these domains as supported "production domains"
-    'deriv.app': 16929, // TODO: [app-link-refactor] - Remove backwards compatibility for `deriv.app`
-    'app.deriv.com': 16929,
-    'staging-app.deriv.com': 16303,
-    'app.deriv.me': 1411,
-    'staging-app.deriv.me': 1411, // TODO: setup staging for deriv.me
-    'app.deriv.be': 30767,
-    'staging-app.deriv.be': 31186,
-    'binary.com': 1,
-    'test-app.deriv.com': 51072,
-};
-
+// Keep only essential platform mappings
 export const platform_app_ids = {
     derivgo: 23789,
 };
 
-export const getCurrentProductionDomain = () =>
-    !/^staging\./.test(window.location.hostname) &&
-    Object.keys(domain_app_ids).find(domain => window.location.hostname === domain);
-
-export const isProduction = () => {
-    const all_domains = Object.keys(domain_app_ids).map(domain => `(www\\.)?${domain.replace('.', '\\.')}`);
-    return new RegExp(`^(${all_domains.join('|')})$`, 'i').test(window.location.hostname);
+// Default app IDs for special cases
+const DEFAULT_APP_IDS = {
+    LOCALHOST: 36300,
+    BOT_STAGING: 19112,
+    BOT_PRODUCTION: 19111,
+    DEFAULT_STAGING: 16303,
+    DEFAULT_PRODUCTION: 16929,
+    DERIV_ME: 1411,
+    DERIV_BE: 30767,
+    DERIV_BE_STAGING: 31186,
+    TEST_APP: 51072
 };
 
-export const isTestLink = () => {
-    return /^((.*)\.binary\.sx)$/i.test(window.location.hostname);
-};
-
-export const isLocal = () => /localhost(:\d+)?$/i.test(window.location.hostname);
-
-/**
- * @deprecated Please use 'WebSocketUtils.getAppId' from '@deriv-com/utils' instead of this.
- */
 export const getAppId = () => {
-    let app_id = null;
-    const user_app_id = ''; // you can insert Application ID of your registered application here
-    const config_app_id = window.localStorage.getItem('config.app_id');
-    const current_domain = getCurrentProductionDomain() || '';
-    window.localStorage.removeItem('config.platform'); // Remove config stored in localstorage if there's any.
-    const platform = window.sessionStorage.getItem('config.platform');
-    const is_bot = isBot();
-    // Added platform at the top since this should take precedence over the config_app_id
-    if (platform && platform_app_ids[platform as keyof typeof platform_app_ids]) {
-        app_id = platform_app_ids[platform as keyof typeof platform_app_ids];
-    } else if (config_app_id) {
-        app_id = config_app_id;
-    } else if (user_app_id.length) {
-        window.localStorage.setItem('config.default_app_id', user_app_id);
-        app_id = user_app_id;
-    } else if (isStaging()) {
-        window.localStorage.removeItem('config.default_app_id');
-        app_id = is_bot ? 19112 : domain_app_ids[current_domain as keyof typeof domain_app_ids] || 16303; // it's being used in endpoint chrome extension - please do not remove
-    } else if (/localhost/i.test(window.location.hostname)) {
-        app_id = 36300;
-    } else {
-        window.localStorage.removeItem('config.default_app_id');
-        app_id = is_bot ? 19111 : domain_app_ids[current_domain as keyof typeof domain_app_ids] || 16929;
+    // 1. First check for app_id in URL parameters (passed from parent if applicable)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlAppId = urlParams.get('app_id');
+    
+    if (urlAppId && !isNaN(parseInt(urlAppId, 10))) {
+        return parseInt(urlAppId, 10);
     }
 
-    return app_id;
+    // 2. Check for platform-specific app ID
+    const platform = window.sessionStorage.getItem('config.platform');
+    if (platform && platform_app_ids[platform as keyof typeof platform_app_ids]) {
+        return platform_app_ids[platform as keyof typeof platform_app_ids];
+    }
+
+    // 3. Check localStorage for manually configured app ID
+    const config_app_id = window.localStorage.getItem('config.app_id');
+    if (config_app_id) {
+        return parseInt(config_app_id, 10);
+    }
+
+    // 4. Handle special domain cases
+    if (/app\.deriv\.me/i.test(window.location.hostname)) {
+        return DEFAULT_APP_IDS.DERIV_ME;
+    }
+    
+    if (/app\.deriv\.be/i.test(window.location.hostname)) {
+        return DEFAULT_APP_IDS.DERIV_BE;
+    }
+    
+    if (/staging-app\.deriv\.be/i.test(window.location.hostname)) {
+        return DEFAULT_APP_IDS.DERIV_BE_STAGING;
+    }
+    
+    if (/test-app\.deriv\.com/i.test(window.location.hostname)) {
+        return DEFAULT_APP_IDS.TEST_APP;
+    }
+
+    // 5. Handle local development
+    if (/localhost/i.test(window.location.hostname)) {
+        return DEFAULT_APP_IDS.LOCALHOST;
+    }
+
+    // 6. Default to staging/production based on environment
+    if (isStaging()) {
+        return isBot() ? DEFAULT_APP_IDS.BOT_STAGING : DEFAULT_APP_IDS.DEFAULT_STAGING;
+    }
+    
+    return isBot() ? DEFAULT_APP_IDS.BOT_PRODUCTION : DEFAULT_APP_IDS.DEFAULT_PRODUCTION;
 };
 
-export const getSocketURL = (is_wallets = false) => {
+export const getSocketURL = () => {
+    // 1. Check for manually configured server URL
     const local_storage_server_url = window.localStorage.getItem('config.server_url');
     if (local_storage_server_url) return local_storage_server_url;
 
-    let active_loginid_from_url;
-    const search = window.location.search;
-    if (search) {
-        const params = new URLSearchParams(document.location.search.substring(1));
-        active_loginid_from_url = params.get('acct1');
-    }
-    const local_storage_loginid = is_wallets
-        ? window.sessionStorage.getItem('active_wallet_loginid') || window.localStorage.getItem('active_wallet_loginid')
-        : window.sessionStorage.getItem('active_loginid') || window.localStorage.getItem('active_loginid');
-    const loginid = local_storage_loginid || active_loginid_from_url;
-    const is_real = loginid && !/^(VRT|VRW)/.test(loginid);
-
-    const server = is_real ? 'green' : 'blue';
-    const server_url = `${server}.derivws.com`;
-
-    return server_url;
+    // 2. Default to unified WebSocket URL
+    return 'ws.derivws.com';
 };
 
 export const checkAndSetEndpointFromUrl = () => {
@@ -107,31 +94,32 @@ export const checkAndSetEndpointFromUrl = () => {
             const qa_server = url_params.get('qa_server') || '';
             const app_id = url_params.get('app_id') || '';
 
-            url_params.delete('qa_server');
-            url_params.delete('app_id');
-
             if (/^(^(www\.)?qa[0-9]{1,4}\.deriv.dev|(.*)\.derivws\.com)$/.test(qa_server) && /^[0-9]+$/.test(app_id)) {
                 localStorage.setItem('config.app_id', app_id);
                 localStorage.setItem('config.server_url', qa_server);
+                
+                // Clean up URL
+                url_params.delete('qa_server');
+                url_params.delete('app_id');
+                const params = url_params.toString();
+                const hash = location.hash;
+                location.href = `${location.protocol}//${location.hostname}${location.pathname}${
+                    params ? `?${params}` : ''
+                }${hash || ''}`;
+
+                return true;
             }
-
-            const params = url_params.toString();
-            const hash = location.hash;
-
-            location.href = `${location.protocol}//${location.hostname}${location.pathname}${
-                params ? `?${params}` : ''
-            }${hash || ''}`;
-
-            return true;
         }
     }
-
     return false;
 };
 
 export const getDebugServiceWorker = () => {
     const debug_service_worker_flag = window.localStorage.getItem('debug_service_worker');
-    if (debug_service_worker_flag) return !!parseInt(debug_service_worker_flag);
-
-    return false;
+    return debug_service_worker_flag ? !!parseInt(debug_service_worker_flag) : false;
 };
+
+// Simplified helper functions
+export const isProduction = () => !isStaging() && !isTestLink() && !isLocal();
+export const isTestLink = () => /^((.*)\.binary\.sx)$/i.test(window.location.hostname);
+export const isLocal = () => /localhost(:\d+)?$/i.test(window.location.hostname);
