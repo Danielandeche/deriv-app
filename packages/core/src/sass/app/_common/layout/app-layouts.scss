@@ -128,16 +128,14 @@
     @include mobile-or-tablet-screen {
         // no footer:
         margin-bottom: 0;
-        height: calc(100% - #{$MOBILE_HEADER_HEIGHT});
+        height: 100%;
         position: relative;
-        margin-top: $MOBILE_HEADER_HEIGHT;
 
         &--is-scrollable {
             overflow-y: auto;
         }
         &--is-dashboard {
-            height: calc(100% - #{$MOBILE_HEADER_HEIGHT_DASHBOARD});
-            margin-top: $MOBILE_HEADER_HEIGHT_DASHBOARD;
+            height: 100%;
         }
         &--is-hidden {
             margin-top: 0;
