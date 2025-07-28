@@ -95,8 +95,7 @@
 
 /** @define app-contents; weak */
 .app-contents {
-    margin: $HEADER_HEIGHT 0 $FOOTER_HEIGHT;
-    height: calc(100vh - #{$HEADER_HEIGHT} - #{$FOOTER_HEIGHT});
+    height: 100%;
     overflow: hidden;
     backface-visibility: hidden;
     background-color: var(--general-main-1);
